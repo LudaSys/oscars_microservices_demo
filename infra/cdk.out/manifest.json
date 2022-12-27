@@ -1,0 +1,108 @@
+{
+  "version": "21.0.0",
+  "artifacts": {
+    "OscarsMicroservicesStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "OscarsMicroservicesStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "OscarsMicroservicesStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "OscarsMicroservicesStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5ad825b885df9b1e8eea781251383b11af1ff83a30f03747bb7de2ba4bed5547.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "OscarsMicroservicesStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "OscarsMicroservicesStack.assets"
+      ],
+      "metadata": {
+        "/OscarsMicroservicesStack/msvc_lambda_role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "msvclambdarole42F96992"
+          }
+        ],
+        "/OscarsMicroservicesStack/choices_table": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "choicestableA404405A"
+            }
+          }
+        ],
+        "/OscarsMicroservicesStack/choices_table/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "choicestableA404405A"
+          }
+        ],
+        "/OscarsMicroservicesStack/choices_table/WriteScaling/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "choicestableWriteScalingTarget557CAF96"
+          }
+        ],
+        "/OscarsMicroservicesStack/choices_table/ReadScaling/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "choicestableReadScalingTargetC880A49E"
+          }
+        ],
+        "/OscarsMicroservicesStack/choices_table/ReadScaling/Target/Tracking/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "choicestableReadScalingTargetTracking662CAE72"
+          }
+        ],
+        "/OscarsMicroservicesStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/OscarsMicroservicesStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/OscarsMicroservicesStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/OscarsMicroservicesStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "OscarsMicroservicesStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

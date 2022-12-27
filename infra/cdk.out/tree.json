@@ -1,0 +1,384 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "OscarsMicroservicesStack": {
+        "id": "OscarsMicroservicesStack",
+        "path": "OscarsMicroservicesStack",
+        "children": {
+          "msvc_lambda_role": {
+            "id": "msvc_lambda_role",
+            "path": "OscarsMicroservicesStack/msvc_lambda_role",
+            "children": {
+              "Importmsvc_lambda_role": {
+                "id": "Importmsvc_lambda_role",
+                "path": "OscarsMicroservicesStack/msvc_lambda_role/Importmsvc_lambda_role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.51.1"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "OscarsMicroservicesStack/msvc_lambda_role/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonSQSFullAccess"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonCloudWatchFullAccess"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonDynamoDBFullAccess"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonDynamoDBReadAccess"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.51.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.51.1"
+            }
+          },
+          "choices_table": {
+            "id": "choices_table",
+            "path": "OscarsMicroservicesStack/choices_table",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "OscarsMicroservicesStack/choices_table/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "year",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "user_id",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "year",
+                        "attributeType": "N"
+                      },
+                      {
+                        "attributeName": "user_id",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 1,
+                      "writeCapacityUnits": 1
+                    },
+                    "tableName": "user_choices"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.51.1"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "OscarsMicroservicesStack/choices_table/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.51.1"
+                }
+              },
+              "WriteScaling": {
+                "id": "WriteScaling",
+                "path": "OscarsMicroservicesStack/choices_table/WriteScaling",
+                "children": {
+                  "Target": {
+                    "id": "Target",
+                    "path": "OscarsMicroservicesStack/choices_table/WriteScaling/Target",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "OscarsMicroservicesStack/choices_table/WriteScaling/Target/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
+                          "aws:cdk:cloudformation:props": {
+                            "maxCapacity": 5,
+                            "minCapacity": 1,
+                            "resourceId": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "table/",
+                                  {
+                                    "Ref": "choicestableA404405A"
+                                  }
+                                ]
+                              ]
+                            },
+                            "roleArn": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":iam::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":role/aws-service-role/dynamodb.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+                                ]
+                              ]
+                            },
+                            "scalableDimension": "dynamodb:table:WriteCapacityUnits",
+                            "serviceNamespace": "dynamodb"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_applicationautoscaling.CfnScalableTarget",
+                          "version": "2.51.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_applicationautoscaling.ScalableTarget",
+                      "version": "2.51.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_applicationautoscaling.BaseScalableAttribute",
+                  "version": "2.51.1"
+                }
+              },
+              "ReadScaling": {
+                "id": "ReadScaling",
+                "path": "OscarsMicroservicesStack/choices_table/ReadScaling",
+                "children": {
+                  "Target": {
+                    "id": "Target",
+                    "path": "OscarsMicroservicesStack/choices_table/ReadScaling/Target",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "OscarsMicroservicesStack/choices_table/ReadScaling/Target/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalableTarget",
+                          "aws:cdk:cloudformation:props": {
+                            "maxCapacity": 5,
+                            "minCapacity": 1,
+                            "resourceId": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "table/",
+                                  {
+                                    "Ref": "choicestableA404405A"
+                                  }
+                                ]
+                              ]
+                            },
+                            "roleArn": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "arn:",
+                                  {
+                                    "Ref": "AWS::Partition"
+                                  },
+                                  ":iam::",
+                                  {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  ":role/aws-service-role/dynamodb.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+                                ]
+                              ]
+                            },
+                            "scalableDimension": "dynamodb:table:ReadCapacityUnits",
+                            "serviceNamespace": "dynamodb"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_applicationautoscaling.CfnScalableTarget",
+                          "version": "2.51.1"
+                        }
+                      },
+                      "Tracking": {
+                        "id": "Tracking",
+                        "path": "OscarsMicroservicesStack/choices_table/ReadScaling/Target/Tracking",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "OscarsMicroservicesStack/choices_table/ReadScaling/Target/Tracking/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyName": "OscarsMicroservicesStackchoicestableReadScalingTargetTracking40887B74",
+                                "policyType": "TargetTrackingScaling",
+                                "scalingTargetId": {
+                                  "Ref": "choicestableReadScalingTargetC880A49E"
+                                },
+                                "targetTrackingScalingPolicyConfiguration": {
+                                  "predefinedMetricSpecification": {
+                                    "predefinedMetricType": "DynamoDBReadCapacityUtilization"
+                                  },
+                                  "targetValue": 80
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_applicationautoscaling.CfnScalingPolicy",
+                              "version": "2.51.1"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_applicationautoscaling.TargetTrackingScalingPolicy",
+                          "version": "2.51.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_applicationautoscaling.ScalableTarget",
+                      "version": "2.51.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_applicationautoscaling.BaseScalableAttribute",
+                  "version": "2.51.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.51.1"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "OscarsMicroservicesStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "OscarsMicroservicesStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.51.1"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "OscarsMicroservicesStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.51.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.197"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "OscarsMicroservicesStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.51.1"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "OscarsMicroservicesStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.51.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.51.1"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.197"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.51.1"
+    }
+  }
+}

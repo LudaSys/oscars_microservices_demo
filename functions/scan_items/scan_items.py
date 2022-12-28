@@ -1,4 +1,5 @@
 import json
+import os
 import boto3
 
 client = boto3.client('dynamodb')
@@ -6,7 +7,7 @@ client = boto3.client('dynamodb')
 
 def handler(event, context):
     data = client.scan(
-        TableName='user_choices'
+        TableName=os.environ['DYNAMODB_TABLE']
     )
 
     response = {
